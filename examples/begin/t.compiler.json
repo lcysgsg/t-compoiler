@@ -1,0 +1,4 @@
+{
+  "target": "./src",
+  "output": "./dist"
+}
