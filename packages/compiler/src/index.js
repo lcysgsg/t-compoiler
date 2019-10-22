@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const fs = require('fs-extra');
 const path = require('path');
 
@@ -9,6 +11,7 @@ const { Log } = require('./utils')
 
 Log.l('\n^=^ compiler combat ready!\n');
 
+Log.l(`config :`, config);
 // const args = require('minimist')(process.argv.slice(2));
 // Log.l(`args         :`, args);
 

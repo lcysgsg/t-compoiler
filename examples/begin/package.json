@@ -1,0 +1,14 @@
+{
+  "name": "begin",
+  "version": "1.0.0",
+  "description": "",
+  "bin": {
+    "tcompoiler": "../../bin/compiler/index.js"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

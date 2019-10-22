@@ -24,6 +24,7 @@
     "cli-color": "^2.0.0",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
+    "parse5": "^5.1.0",
     "snabbdom": "^0.7.3"
   }
 }

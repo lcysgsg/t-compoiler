@@ -2,19 +2,19 @@ const fs = require('fs-extra');
 const path = require('path');
 const mkdirp = require('mkdirp');
 const chokidar = require('chokidar');
-const { Log } = require('./utils')
+const { Log } = require('./utils');
+const transform = require('./transform/index');
 
 const config = require('./config-factory');
 const compilerFilePath = config.compilerFilePath;
 const watchPath = path.resolve(`${compilerFilePath}/${config.target}`);
 const outputPath = path.resolve(`${compilerFilePath}/${config.output}`);
 
-Log.l(`config :`, config);
 Log.notice(`# watching ${watchPath} -> ${outputPath} ...`)
 
 // 路径中的文件名
 // e.g. `./src/index.html => index.html`
-const filenameReg = /[^\\/]+\.(html|htm)$/;
+const filenameReg = /[^\\/]+\..+$/;
 
 // 监听
 const watcher = chokidar.watch(watchPath, {});
@@ -62,17 +62,18 @@ watcher
 const watcherEventHandler = {
   add(ckdPath) {
     const { outputFileAbsolutePath } = getUsualPath(ckdPath);
+    const filename = ckdPath.match(filenameReg);
     const sourceCode = fs.readFileSync(ckdPath, 'utf-8');
-    this._writeFile(sourceCode, outputFileAbsolutePath);
+    const translated = this._translate(filename, sourceCode);
+    this._writeFile(translated, outputFileAbsolutePath);
   },
 
+  // 目前 change 跟 add 事件情况基本相同， 都是解析、转换、写入
   change(ckdPath) {
-    const { outputFileAbsolutePath } = getUsualPath(ckdPath);
-    const stat = fs.statSync(ckdPath);
-    if (stat.isFile()) {
-      const sourceCode = fs.readFileSync(ckdPath, 'utf-8');
-      this._writeFile(sourceCode, outputFileAbsolutePath);
-    }
+    // const stat = fs.statSync(ckdPath);
+    // if (stat.isFile()) {
+    this.add(ckdPath)
+    // }
   },
 
   addDir(ckdPath) {
@@ -86,10 +87,15 @@ const watcherEventHandler = {
     }
   },
 
-  _writeFile(sourceCode, filePath) {
+  _translate(filename, code){
+    const parseResult = transform.parse(filename, code)
+    return parseResult
+  },
+
+  _writeFile(code, filePath) {
     fs.open(outputPath, 'a+', function(err, fd) {
       if (err) console.error('open error', err);
-      fs.writeFile(filePath, sourceCode);
+      fs.writeFile(filePath, code);
     });
   },
 };
@@ -110,9 +116,9 @@ function getUsualPath(ckdPath) {
   const outputDirRelativePath = outputFileAbsolutePath
     .replace(compilerFilePath, '.')
     .replace(filenameReg, '');
-  console.log(`fileRelativePath       : ${fileRelativePath}`);
-  console.log(`outputFileAbsolutePath : ${outputFileAbsolutePath}`);
-  console.log(`outputDirRelativePath  : ${outputDirRelativePath}`);
+  // console.log(`fileRelativePath       : ${fileRelativePath}`);
+  // console.log(`outputFileAbsolutePath : ${outputFileAbsolutePath}`);
+  // console.log(`outputDirRelativePath  : ${outputDirRelativePath}`);
 
   return {
     fileRelativePath,
