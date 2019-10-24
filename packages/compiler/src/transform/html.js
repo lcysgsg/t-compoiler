@@ -17,6 +17,26 @@ function matchNode (elem) {
     elem.tagName = 'div'
     elem.attrs.push({name: 'data-v-ys-list', value: ''})
   }
+  if (elem.nodeName === 'ys-form') {
+    elem.nodeName = 'form'
+    elem.tagName = 'form'
+    elem.attrs.push({name: 'data-v-ys-form', value: ''})
+  }
+  if (elem.nodeName === 'ys-tr') {
+    elem.nodeName = 'tr'
+    elem.tagName = 'tr'
+    elem.attrs.push({name: 'data-v-ys-tr', value: ''})
+  }
+  if (elem.nodeName === 'ys-td') {
+    elem.nodeName = 'td'
+    elem.tagName = 'td'
+    elem.attrs.push({name: 'data-v-ys-td', value: ''})
+  }
+  if (elem.nodeName === 'ys-input') {
+    elem.nodeName = 'input'
+    elem.tagName = 'input'
+    elem.attrs.push({name: 'data-v-ys-input', value: ''})
+  }
 }
 
 
