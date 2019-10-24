@@ -100,19 +100,22 @@ const watcherEventHandler = {
   },
 };
 
+/**
+ * 根据被修改文件路径得出
+ * @param ckdPath string 
+ * @returns object {
+ *  fileRelativePath, 发生变动文件的相对路径 e.g. .\index.html
+ *  outputFileAbsolutePath, 要输出的文件的绝对路径 e.g. ${root}\dist\index.html
+ *  outputDirRelativePath, 要输出的文件夹的相对路径 e.g. .\dist\add-dir\
+ *}
+ */
 function getUsualPath(ckdPath) {
-  // 发生变动文件的相对路径
-  // e.g. .\index.html
   const fileRelativePath = ckdPath
     .replace(`${compilerFilePath}`, '.')
     .replace('\\src', '');
-  // 要输出的文件的绝对路径
-  // e.g. ${root}\dist\index.html
   const outputFileAbsolutePath = path.resolve(
     `${outputPath}/${fileRelativePath}`,
   );
-  // 要输出的文件夹的相对路径
-  // e.g. .\dist\add-dir\
   const outputDirRelativePath = outputFileAbsolutePath
     .replace(compilerFilePath, '.')
     .replace(filenameReg, '');
